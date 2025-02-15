@@ -1,30 +1,32 @@
 import { useState, useEffect } from 'react';
+import axios from'axios'
 
 export const AxiosApi = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
-  const fetchUrl = 'https://jsonplaceholder.typicode.com/posts';
+  
 
   const fetchData = async () => {
-    try {
-      const response = await fetch(fetchUrl);
-      if (!response.ok) {
-        throw new Error('Error en la solicitud');
-      }
-      const datos = await response.json();
-      console.log(datos);
-      setData(datos);
-    } catch (error) {
-      console.error('error', error);
-    }
-  };
+    
+      axios.get('https://jsonplaceholder.typicode.com/posts',{
+        headers:{
+          'Authorization':'Bearer tu_token_aqui',
+          'Content-Type':'application/json'
+        }
+      })
+      .then(datos => setData(datos.data))
+      .catch (error=> 
+      console.error('error', error))
+    
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
     <>
-      <h1>Bienvenido Postcon Axios 2025</h1>
+      <h1>Bienvenido Post con Axios 2025</h1>
       <ul>
         {data.map((post) => (
           <li key={post.id}>{post.title}</li>
